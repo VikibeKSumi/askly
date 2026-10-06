@@ -1,0 +1,28 @@
+models:
+  dense_model_name: "llama-text-embed-v2"   
+  sparse_model_name: "pinecone-sparse-english-v0" 
+  rerank_model_name: "bge-reranker-v2-m3"
+
+vector_db: #pinecone
+  index_name: "askly-index"
+  namespace: "askly-namespace"
+
+vector_search:
+  #retrieval
+  top_k: 10
+
+  # fusion
+  rrf_weights: [0.7, 0.3]
+  rrf_k: 60
+  rrf_top_n: 10
+
+  # rerank
+  rerank_top_n: 5
+
+  # field setting
+  include_fields: ["text", "parent_id", "section", "doc_id", "title", "source_uri"]
+  dense_search_field: "embedding"
+  sparse_search_field: "sparse_value"
+
+
+    
