@@ -14,11 +14,11 @@ class Retrieve():
             dense_search_field: str, sparse_search_field: str,
             rerank_top_n: int, rrf_weights: list[float],
             rrf_k: int, rrf_top_n: int, rerank_model: str,
-            include_fields: list[str]
+            include_fields: list[str], search_type: str
         ):
 
         # settings (from config)
-
+        self.search_type = search_type
         self.dense_model = dense_model
         self.sparse_model = sparse_model
         self.rerank_model = rerank_model
@@ -50,9 +50,9 @@ class Retrieve():
 
         )
 
-    def retrieve(self, query: str) -> list[Document]:
+    def retrieve(self, query: str) -> tuple[list[Document], dict[str, dict]]:
 
-        query_dense_values = dense_embed(
+        query_dense_values: list[float] = dense_embed(
             vector_client=self.vector_client,
             query=query,
             dense_model=self.dense_model
@@ -63,20 +63,34 @@ class Retrieve():
             sparse_model=self.sparse_model
         )
 
-        hybrid_search_results = self.hybrid_search.hybrid_search_fusion(
+        hybrid_search_results: list[Document] = self.hybrid_search.hybrid_search_fusion(
             query_dense_values=query_dense_values,
             query_sparse_indices=query_sparse_indices,
             query_sparse_values=query_sparse_values,
         )
 
-        reranked_results = rerank(
+        reranked_results: list[Document] = rerank(
             vector_client=self.vector_client,
             rerank_model=self.rerank_model,
             query=query,
             matches=hybrid_search_results,
             rerank_top_n=self.rerank_top_n
         )
+        retrieval_info = {
+              "retrieval_info": {
+                "search_type": self.search_type,
+                "top_k": self.top_k,
+                "rerank_top_n": self.rerank_top_n,
+                "models": {
+                    "dense": self.dense_model,
+                    "sparse": self.sparse_model,
+                    "rerank": self.rerank_model,
+                },
+                "retrieval_ms": "",
+            }
+        }
 
-        return reranked_results
+        return reranked_results, retrieval_info
+    
 
 
