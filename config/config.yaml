@@ -8,6 +8,7 @@ vector_db: #pinecone
   namespace: "askly-namespace"
 
 vector_search:
+  search_type: "hybrid+rerank"
   #retrieval
   top_k: 10
 
@@ -24,5 +25,10 @@ vector_search:
   dense_search_field: "embedding"
   sparse_search_field: "sparse_value"
 
+llm:
+  model_name: "gpt-4o-mini"
+  temperature: 0
 
-    
+generation:
+  context_build_threshold: 0.5
+  fallback_answer: "I couldn't find this in the company documents."

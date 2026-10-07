@@ -23,7 +23,11 @@ class AsklyConfig():
         self.INCLUDE_FIELDS = config_data["vector_search"]["include_fields"]
         self.DENSE_SEARCH_FIELD = config_data["vector_search"]["dense_search_field"]
         self.SPARSE_SEARCH_FIELD = config_data["vector_search"]["sparse_search_field"]
-      
+        self.SEARCH_TYPE = config_data["vector_search"]["search_type"]
+        self.LLM_MODEL_NAME = config_data["llm"]["model_name"]
+        self.LLM_TEMPERATURE = config_data["llm"]["temperature"]
+        self.FALLBACK_ANSWER = config_data["generation"]["fallback_answer"]
+        self.CONTEXT_BUILD_THRESHOLD = config_data["generation"]["context_build_threshold"]
     
 try: 
     file_path = Path(__file__).parent / "config.yaml"
