@@ -1,7 +1,6 @@
 import yaml
 from pathlib import Path
 import logging
-
 logger = logging.getLogger(__name__)
 
 class AsklyConfig():
@@ -10,9 +9,9 @@ class AsklyConfig():
         with open(file_path, "r", encoding="utf-8") as f:
             config_data = yaml.safe_load(f)
         
-        self.DENSE_MODEL_NAME = config_data["models"]["dense_model_name"]
-        self.SPARSE_MODEL_NAME = config_data["models"]["sparse_model_name"]
-        self.RERANK_MODEL_NAME = config_data["models"]["rerank_model_name"]
+        self.DENSE_MODEL_NAME = config_data["retrieval_models"]["dense_model_name"]
+        self.SPARSE_MODEL_NAME = config_data["retrieval_models"]["sparse_model_name"]
+        self.RERANK_MODEL_NAME = config_data["retrieval_models"]["rerank_model_name"]
         self.INDEX_NAME = config_data["vector_db"]["index_name"]
         self.NAMESPACE = config_data["vector_db"]["namespace"]
         self.TOP_K =  config_data["vector_search"]["top_k"]
@@ -28,11 +27,12 @@ class AsklyConfig():
         self.LLM_TEMPERATURE = config_data["llm"]["temperature"]
         self.FALLBACK_ANSWER = config_data["generation"]["fallback_answer"]
         self.CONTEXT_BUILD_THRESHOLD = config_data["generation"]["context_build_threshold"]
-    
-try: 
-    file_path = Path(__file__).parent / "config.yaml"
-    config = AsklyConfig(file_path=file_path)
-    logger.info("Configuration loaded successfully")
-except Exception as e:
-    logger.exception(f"An error occured in conifguration loading stage: {e}")
-    raise
+        self.JUDGE_LLM = config_data["evaluation"]["judge_llm"]
+        self.JUDGE_EMBEDDING = config_data["evaluation"]["judge_embedding"]
+        self.GOLDEN_DATASET_PATH = config_data["evaluation"]["golden_dataset_path"]
+        self.SAVE_PATH = config_data["evaluation"]["save_path"]
+
+
+file_path = Path(__file__).parent / "config.yaml"
+config = AsklyConfig(file_path=file_path)
+logger.info("Configuration loaded successfully")
