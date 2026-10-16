@@ -1,0 +1,42 @@
+steps:
+  - id: unit-tests
+    name: python:3.11-slim
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        pip install --no-cache-dir -r requirements.txt &&
+        python -m unittest discover -s tests -v
+
+  - id: build-image
+    waitFor: ['unit-tests']
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --platform=linux/amd64
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+      - .
+    
+  - id: push-to-artifacts-repo
+    waitFor: ['build-image']
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+
+
+substitutions:
+  _REGION: asia-south1
+  _REPOSITORY: askly-assistant-repo
+  _SERVICE: askly-assistant-image
+  _PIPELINE: askly-assistant-pipeline
+
+# Record the image in the build results; BUILD_ID gives each build its own tag.
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 1200s
