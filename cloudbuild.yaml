@@ -1,5 +1,5 @@
 steps:
-  - id: unit-tests
+  - id: unit-tests-merged
     name: python:3.11-slim
     entrypoint: sh
     args:
@@ -9,7 +9,7 @@ steps:
         python -m unittest discover -s tests -v
 
   - id: build-image
-    waitFor: ['unit-tests']
+    waitFor: ['unit-tests-merged']
     name: gcr.io/cloud-builders/docker
     args:
       - build
@@ -25,6 +25,19 @@ steps:
       - push
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$BUILD_ID
 
+ # Cloud Deploy owns staging rollout and production approval.
+  - id: create-release
+    waitFor: ['push-to-artifacts-repo']
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - scripts/create-release.sh
+      - $PROJECT_ID
+      - ${_REGION}
+      - ${_REPOSITORY}
+      - ${_SERVICE}
+      - $BUILD_ID
+      - ${_PIPELINE}
 
 substitutions:
   _REGION: asia-south1
