@@ -38,11 +38,14 @@ steps:
       - ${_SERVICE}
       - $BUILD_ID
       - ${_PIPELINE}
+      - ${_BUCKET}
+
 
 substitutions:
   _REGION: asia-south1
   _REPOSITORY: askly-assistant-repo
   _SERVICE: askly-assistant-image
+  _BUCKET: askly-assistant-release-bucket
   _PIPELINE: askly-assistant-pipeline
 
 # Record the image in the build results; BUILD_ID gives each build its own tag.
