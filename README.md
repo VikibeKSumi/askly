@@ -15,23 +15,23 @@
 **Output:** one response object per query (answer, citations, sources, contexts, run metadata).
 
 
+## Deployed links
+[Staging link](https://askly-assistant-staging-1081188824450.asia-south1.run.app) \
+[Production link](https://askly-assistant-production-1081188824450.asia-south1.run.app)
+
 ## Configuration
 Settings are in [`config/config.yaml`](config/config.yaml)
 ```yaml
-models:
-  dense_model_name: "llama-text-embed-v2"   
-  sparse_model_name: "pinecone-sparse-english-v0" 
-  rerank_model_name: "bge-reranker-v2-m3"
-
 vector_db: #pinecone
   index_name: "askly-index"
   namespace: "askly-namespace"
 
 vector_search:
   search_type: "hybrid+rerank"
+
   #retrieval
   top_k: 10
-
+  
   # fusion
   rrf_weights: [0.7, 0.3]
   rrf_k: 60
@@ -45,12 +45,27 @@ vector_search:
   dense_search_field: "embedding"
   sparse_search_field: "sparse_value"
 
+retrieval_models:
+  dense_model_name: "llama-text-embed-v2"   
+  sparse_model_name: "pinecone-sparse-english-v0" 
+  rerank_model_name: "bge-reranker-v2-m3"
+
 llm:
   model_name: "gpt-4o-mini"
   temperature: 0
 
 generation:
-  context_build_threshold: 0.5
+  context_build_threshold: 0.02
   fallback_answer: "I couldn't find this in the company documents."
 
+evaluation:
+  judge_llm: "gpt-4o-mini"
+  judge_embedding: "text-embedding-3-small"
+  golden_dataset_path: "evaluation/data_and_reports/golden_dataset.json"
+  save_path: "evaluation/data_and_reports"
 ```
+
+
+## Roadmap
+- Add latency metrics
+- 
