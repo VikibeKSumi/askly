@@ -163,6 +163,7 @@ evaluation:
 - Add a RAGAS eval gate to CI to block regressions.
 - Save per-question scores and run metadata; compare each run against the previous one.
 - Measure refusal accuracy; expand the golden dataset; use a stronger judge model.
+- Save eval reports from CI runs to a GCS bucket.
 
 **Monitoring**
 - Add tracing and monitoring (LangSmith) for latency, cost and errors.
