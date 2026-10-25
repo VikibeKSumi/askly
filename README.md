@@ -16,12 +16,12 @@ Askly is an technical query assistant over internal company documents. It's base
 - **CI/CD** - deployed to GCP using the services Cloud Run, Cloud Deploy, Cloud Storage, Cloud Build, Secret Manager, IAM Service Accounts with PR checks that builds on merge. It deploys to staging then production through manual approval.
 
 ## Eval metrics
-| metric | score |
+| Metric | Score |
 | --- | --- |
-| context recall | 0.96 |
-| context precision | 0.82 |
-| faithfulness | 0.91 |
-| answer relevancy | 0.69 |
+| Context Recall | 0.96 |
+| Context Precision | 0.82 |
+| Faithfulness | 0.91 |
+| Answer Relevancy | 0.69 |
 
 ## Tech stack
 - Core - Python, OpenAI, Pydantic, LangChain
