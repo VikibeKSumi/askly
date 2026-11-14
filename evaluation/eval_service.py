@@ -38,19 +38,6 @@ class EvalService():
 
         scored = [d for d in eval_dataset if not d.get("is_refusal")]
 
-        logger.info(f"Scoring faithfulness {len(scored)} samples...")
-        f_results: list[MetricResult] = await self.faithfulness.abatch_score([
-            {"user_input": eval_data["user_input"], "response": eval_data["response"],
-            "retrieved_contexts": eval_data["retrieved_contexts"]}
-            for eval_data in scored
-        ])
-
-        logger.info(f"Scoring answer relevancy {len(scored)} samples...")
-        ar_results = await self.answer_relevancy.abatch_score([
-            {"user_input": eval_data["user_input"], "response": eval_data["response"]}
-            for eval_data in scored
-        ])
-
         logger.info(f"Scoring context recall {len(scored)} samples...")
         cr_results = await self.context_recall.abatch_score([
             {"user_input": eval_data["user_input"], "retrieved_contexts": eval_data["retrieved_contexts"],
@@ -64,12 +51,26 @@ class EvalService():
             "retrieved_contexts": eval_data["retrieved_contexts"]}
             for eval_data in scored
         ])
+        
+        logger.info(f"Scoring faithfulness {len(scored)} samples...")
+        f_results: list[MetricResult] = await self.faithfulness.abatch_score([
+            {"user_input": eval_data["user_input"], "response": eval_data["response"],
+            "retrieved_contexts": eval_data["retrieved_contexts"]}
+            for eval_data in scored
+        ])
+
+        logger.info(f"Scoring answer relevancy {len(scored)} samples...")
+        ar_results = await self.answer_relevancy.abatch_score([
+            {"user_input": eval_data["user_input"], "response": eval_data["response"]}
+            for eval_data in scored
+        ])
+
 
         eval_output = {
+            "context_recall": self.average(cr_results),
+            "context_precision": self.average(cp_results),
             "faithfulness": self.average(f_results),
             "answer_relevancy": self.average(ar_results),
-            "context_recall": self.average(cr_results),
-            "context_precision": self.average(cp_results)
         }
 
         return eval_output

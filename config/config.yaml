@@ -36,6 +36,7 @@ generation:
 
 evaluation:
   judge_llm: "gpt-4o-mini"
+  judge_temperature: 0
   judge_embedding: "text-embedding-3-small"
   golden_dataset_path: "evaluation/data_and_reports/golden_dataset.json"
   save_path: "evaluation/data_and_reports"

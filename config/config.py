@@ -28,6 +28,7 @@ class AsklyConfig():
         self.FALLBACK_ANSWER = config_data["generation"]["fallback_answer"]
         self.CONTEXT_BUILD_THRESHOLD = config_data["generation"]["context_build_threshold"]
         self.JUDGE_LLM = config_data["evaluation"]["judge_llm"]
+        self.JUDGE_TEMPERATURE = config_data["evaluation"]["judge_temperature"]
         self.JUDGE_EMBEDDING = config_data["evaluation"]["judge_embedding"]
         self.GOLDEN_DATASET_PATH = config_data["evaluation"]["golden_dataset_path"]
         self.SAVE_PATH = config_data["evaluation"]["save_path"]
