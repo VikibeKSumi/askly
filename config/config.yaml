@@ -35,7 +35,7 @@ generation:
   fallback_answer: "I couldn't find this in the company documents."
 
 evaluation:
-  judge_llm: "gpt-4o-mini"
+  judge_llm: "gpt-4.1-mini"
   judge_temperature: 0
   judge_embedding: "text-embedding-3-small"
   golden_dataset_path: "evaluation/data_and_reports/golden_dataset.json"

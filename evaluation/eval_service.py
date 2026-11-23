@@ -23,10 +23,10 @@ class EvalService():
         self.client = client
         self.judge_llm = llm_factory(model=judge_llm, client=self.client)
         self.judge_embedding = embedding_factory("openai", model=judge_embedding, client=self.client)
-        self.faithfulness = Faithfulness(llm=self.judge_llm)
-        self.answer_relevancy = AnswerRelevancy(llm=self.judge_llm, embeddings=self.judge_embedding)
         self.context_recall = ContextRecall(llm=self.judge_llm)
         self.context_precision = ContextPrecision(llm=self.judge_llm)
+        self.faithfulness = Faithfulness(llm=self.judge_llm)
+        self.answer_relevancy = AnswerRelevancy(llm=self.judge_llm, embeddings=self.judge_embedding)
 
 
     def average(self, results : list[MetricResult]) -> float:
@@ -36,7 +36,7 @@ class EvalService():
 
     async def evaluate(self, eval_dataset: list[dict]) -> dict[str, Any]:
 
-        scored = [d for d in eval_dataset if not d.get("is_refusal")]
+        scored = [d for d in eval_dataset if d.get("input_type", "") == "answerable"]
 
         logger.info(f"Scoring context recall {len(scored)} samples...")
         cr_results = await self.context_recall.abatch_score([
