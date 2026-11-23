@@ -33,7 +33,7 @@ def build_eval_dataset(
             "reference": data.get("reference"),
             "response": response ,
             "retrieved_contexts": retrieved_contexts,
-            "is_refusal": data.get("is_refusal", False)
+            "input_type": data.get("input_type", "")
         })
 
     return eval_dataset  
