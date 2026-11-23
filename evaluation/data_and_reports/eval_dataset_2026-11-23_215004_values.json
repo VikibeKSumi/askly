@@ -1,0 +1,13 @@
+{
+  "evaluation_info": {
+    "dataset_name": "eval_dataset_2026-11-23_215004.json",
+    "judge_llm": "gpt-4.1-mini",
+    "judge_embedding": "text-embedding-3-small"
+  },
+  "scores": {
+    "context_recall": 1.0,
+    "context_precision": 0.942,
+    "faithfulness": 0.919,
+    "answer_relevancy": 0.812
+  }
+}
